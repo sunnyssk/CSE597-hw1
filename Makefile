@@ -1,10 +1,10 @@
 # Makefile
 # Author     : Yueze Tan
 # Email      : yut75@psu.edu
-# Written for: CSE 597-002(Fall 2018), HW00
-# Last modified @ 2018/08/22
+# Written for: CSE 597-002(Fall 2018), HW01
+# Last modified @ 2018/09/06
 
-NAME = HelloWorld
+NAME = LUDecomposition
 
 CC = g++
 CFLAGS = -O2
