@@ -7,8 +7,8 @@
 NAME = LUDecomposition
 
 CC = g++
-CFLAGS = -O2
-LFLAGS = 
+CFLAGS = -O2 -mfma -mavx
+LFLAGS = -lm
 
 SRCPATH = ./src
 OBJPATH = ./obj

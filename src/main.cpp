@@ -1,20 +1,30 @@
 #include <iostream>
+#include <cstdlib>
 #include <cmath>
+#include <ctime>
 #include <exception>
 
 #include "matrix.h"
 
 int main (int argc, char** argv) {
-    double buffer1[9] = {1, 1, 1, 1, 2, 2, 1, 2, 3};
-    double buffer2[9] = {1, 1, 1, 0, 1, 1, 0, 0, 1};
-    double buffer3[9] = {1, 0, 0, 1, 1, 0, 1, 1, 1};
-    MatD mat(3, 3, buffer1);
-    MatD L(3, 3, buffer2), U(3, 3, buffer3);
+    srand(time(NULL));
+    double buffer1[9] = {1.0, 4.0, 4.0, 2.0, 4.0, 6.0, 2.0, 2.0, 4.0};
+    int size = 6;
+    MatD A(size, size);
+    A.Rand();
+    MatD P(size, size), L(size, size), U(size, size);
+    MatD invL(size, size), invU(size, size), invA(size, size);
 
-    std::cout << "mat =\n" << mat << std::endl;
-    mat.LUDecomposition(L, U);
-    std::cout << "L =\n" << L << std::endl;
-    std::cout << "U =\n" << U << std::endl;
-    std::cout << "L * U =\n" << L * U << std::endl;
+    std::cout << "A = \n" << A << std::endl;
+    A.PLUDecomposition(P, L, U);    
+    std::cout << "P = \n" << P << std::endl;
+    std::cout << "L = \n" << L << std::endl;
+    std::cout << "U = \n" << U << std::endl;
+    std::cout << "P * A - L * U = \n" << (P * A - L * U) << std::endl;
+
+    L.LInverse(invL);
+    U.UInverse(invU);
+    invA = invU * invL * P;
+    std::cout << "A * inv(A) = \n" << (A * invA) << std::endl;
     return 0;
 }
