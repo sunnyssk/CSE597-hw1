@@ -38,7 +38,7 @@ void DebyeJacobiSolve (Field3D const & rhs, Field3D & potential, double debye_le
     do {
         errmax = 0.0;
         if (iter_cnt++ >= MAX_ITER_NUM) {
-            std::cout << "Iteration number exceeds limit! Exit automatically.\n" << std::endl;
+            std::cout << "Iteration number exceeds limit! Exit automatically." << std::endl;
             break;
         }
         for (int i = 1; i < nx - 1; i++) {
@@ -52,7 +52,7 @@ void DebyeJacobiSolve (Field3D const & rhs, Field3D & potential, double debye_le
         Field3D *tmp = prev;
         prev = next;
         next = tmp;
-        std::cout << "Iteration round #" << iter_cnt << ", maximum error: " << errmax << std::endl;
+        std::cout << "Iteration round #" << iter_cnt << ", maximum error: " << errmax << "\n";
     } while (errmax >= err_threshold || &potential != next);                    // only exits iteration when the original field is updated
 }
 

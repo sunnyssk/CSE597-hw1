@@ -18,6 +18,9 @@ int main (int argc, char** argv) {
     for (int i = 0; i < 30; i++) rhs(rand() % nx, rand() % ny, rand() % nz) = -1 * ee / e0 * 1E27;       // -rho / epsilon_0
 
     // Direct Solver
+    std::cout << "==============="
+              << " Direct Solver "
+              << "===============" << std::endl;
     DebyeLUSolver dsolve;
     dsolve.GenerateSolverMatrix(rhs, debye_length);
     std::cout << "System matrix generated." << std::endl;
@@ -33,6 +36,9 @@ int main (int argc, char** argv) {
     fclose(fout);
 
     // Iterative Solver
+    std::cout << "=================="
+              << " Iterative Solver "
+              << "==================" << std::endl;
     DebyeJacobiSolve(rhs, potential2, debye_length, 1E-10);
     fout = fopen("output/potential-iterative.txt", "w");
     fprintf(fout, "%d %d\n", nx, ny);
