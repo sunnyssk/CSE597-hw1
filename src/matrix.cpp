@@ -52,6 +52,15 @@ template <typename T> void Matrix<T>::LInverse (Matrix<T> & res_container) const
     }
 }
 
+template <typename T> void Matrix<T>::LSolve (Matrix<T> const & src, Matrix<T> & res_container) const {
+    int n = this->Rows();
+    for (int i = 0; i < n; i++) {
+        T sum = T(0);
+        for (int j = 0; j < i; j++) sum += (*this)(i, j) * res_container(j, 0);
+        res_container(i, 0) = (src(i, 0) - sum) / (*this)(i, i);
+    }
+}
+
 template <typename T> void Matrix<T>::LUDecomposition (Matrix<T> & l_container, Matrix<T> & u_container) const {
     if (rows_ != cols_) throw "ERROR: LU decomposition not applying on a square matrix.";
     // else:
@@ -190,6 +199,15 @@ template <typename T> void Matrix<T>::UInverse (Matrix<T> & res_container) const
             res_container(i, k) = -res_container(i, k) * ratio;
         }
         res_container(k, k) = ratio;
+    }
+}
+
+template <typename T> void Matrix<T>::USolve (Matrix<T> const & src, Matrix<T> & res_container) const {
+    int n = this->Rows();
+    for (int i = n - 1; i >= 0; i--) {
+        T sum = T(0);
+        for (int j = i + 1; j < n; j++) sum += (*this)(i, j) * res_container(j, 0);
+        res_container(i, 0) = (src(i, 0) - sum) / (*this)(i, i);
     }
 }
 

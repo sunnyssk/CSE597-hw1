@@ -9,7 +9,7 @@
 
 template <typename T> class Matrix {
 public:
-    Matrix (int rows, int cols) : rows_(rows), cols_(cols), mapping_only_(false), data_(nullptr) { data_ = new T[rows_ * cols_]; }
+    Matrix (int rows, int cols) : rows_(rows), cols_(cols), mapping_only_(false), data_(nullptr) { data_ = new T[rows_ * cols_](); }
     Matrix (int rows, int cols, T* buffer, bool mapping_only=false) : rows_(rows), cols_(cols), mapping_only_(mapping_only), data_(nullptr) {
         int size = rows_ * cols_;
         data_ = new T[size];
@@ -26,10 +26,10 @@ public:
     inline int Rows () const { return rows_; }
     inline int Cols () const { return cols_; }
     inline int Size () const { return rows_ * cols_; }
-    inline T& operator () (int index) { return data_[index]; }
-    inline T& operator () (int row, int col) { return data_[col * rows_ + row]; }
-    const inline T& operator () (int index) const { return data_[index]; }
-    const inline T& operator () (int row, int col) const { return data_[col * rows_ + row]; }
+    inline T & operator () (int index) { return data_[index]; }
+    inline T & operator () (int row, int col) { return data_[col * rows_ + row]; }
+    const inline T & operator () (int index) const { return data_[index]; }
+    const inline T & operator () (int row, int col) const { return data_[col * rows_ + row]; }
 
     // Copies the info from src to current object.
     void Copy(Matrix const & src);
@@ -61,9 +61,13 @@ public:
     // Carries out PLU decomposition (partial-pivoting) on a matrix and save the results of PA = LU into the containers.
     void PLUDecomposition (Matrix & p_container, Matrix & l_container, Matrix & u_container) const;
     // Gets inverse matrix of lower triangular matrix and saves it in the result container.
-    void LInverse(Matrix & res_container) const;
+    void LInverse (Matrix & res_container) const;
     // Gets inverse matrix of upper triangular matrix and saves it in the result container.
-    void UInverse(Matrix & res_container) const;
+    void UInverse (Matrix & res_container) const;
+    // Solves Lx = b with src as vector b and saves x into res_container.
+    void LSolve (Matrix const & src, Matrix & res_container) const;
+    // Solves Ux = b with src as vector b and saves x into res_container.
+    void USolve (Matrix const & src, Matrix & res_container) const;
 
     // Matrix additions.
     static void Add (Matrix const & opr1, Matrix const & opr2, Matrix & res);

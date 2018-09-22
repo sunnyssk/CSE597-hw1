@@ -2,7 +2,7 @@
 # Author     : Yueze Tan
 # Email      : yut75@psu.edu
 # Written for: CSE 597-002(Fall 2018), HW01
-# Last modified @ 2018/09/06
+# Last modified @ 2018/09/22
 
 NAME = LUDecomposition
 
@@ -11,7 +11,7 @@ CFLAGS = -O2 -mfma -mavx
 LFLAGS = -lm
 
 SRCPATH = ./src
-OBJPATH = ./obj
+OBJPATH = ./build
 BINPATH = ./bin
 
 SOURCES = $(wildcard ${SRCPATH}/*.cpp)
