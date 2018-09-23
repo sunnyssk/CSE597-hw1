@@ -22,7 +22,7 @@ void ApplDirichletCond (Field3D & field) {
     }
 }
 
-void DebyeJacobiSolve (Field3D const & rhs, Field3D & potential, double debye_length, double err_threshold) {
+int DebyeJacobiSolve (Field3D const & rhs, Field3D & potential, double * iter_err_array, double debye_length, double err_threshold) {
     int nx = rhs.Nx(), ny = rhs.Ny(), nz = rhs.Nz();
     Field3D aux_field(nx, ny, nz, rhs.Dx(), rhs.Dy(), rhs.Dz());
     double dx2 = rhs.Dx(), dy2 = rhs.Dy(), dz2 = rhs.Dz(), ldi2 = 1 / (debye_length * debye_length);
@@ -37,7 +37,7 @@ void DebyeJacobiSolve (Field3D const & rhs, Field3D & potential, double debye_le
     ApplDirichletCond(aux_field);
     do {
         errmax = 0.0;
-        if (iter_cnt++ >= MAX_ITER_NUM) {
+        if (iter_cnt++ >= MAX_ITER_NUM - 1) {
             std::cout << "Iteration number exceeds limit! Exit automatically." << std::endl;
             break;
         }
@@ -53,7 +53,9 @@ void DebyeJacobiSolve (Field3D const & rhs, Field3D & potential, double debye_le
         prev = next;
         next = tmp;
         std::cout << "Iteration round #" << iter_cnt << ", maximum error: " << errmax << "\n";
+        iter_err_array[iter_cnt - 1] = errmax;
     } while (errmax >= err_threshold || &potential != next);                    // only exits iteration when the original field is updated
+    return iter_cnt;
 }
 
 void DebyeLUSolver::GenerateSolverMatrix (Field3D const & rhs, double debye_length) {
@@ -119,4 +121,17 @@ void DebyeLUSolver::SolverMatrixDecompose () {
     pLmat_ = new MatD(r, c);
     pUmat_ = new MatD(r, c);
     pAmat_->PLUDecomposition(*pPmat_, *pLmat_, *pUmat_);
+}
+
+void Field3D::WriteField (FILE * output_file) {
+    fprintf(output_file, "%d %d %d\n", nx_, ny_, nz_);
+    fprintf(output_file, "%lE %lE %lE\n", dx_, dy_, dz_);
+    for (int k = 0; k < nz_; k++)
+        for (int j = 0; j < ny_; j++)
+            for (int i = 0; i < nx_; i++) fprintf(output_file, "%lE\n", (*this)(i, j, k));
+}
+
+void WriteArray (FILE * output_file, double * array, int length) {
+    fprintf(output_file, "%d\n", length);
+    for (int i = 0; i < length; i++) fprintf(output_file, "%lE\n", array[i]);
 }

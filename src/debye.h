@@ -25,8 +25,11 @@ public:
     double const Dx () const { return dx_; }
     double const Dy () const { return dy_; }
     double const Dz () const { return dz_; }
+    double * const Buffer () { return buffer_; }
+    double const * const Buffer () const { return buffer_; }
 
     void AssignField (double * buffer) { for (int i = 0; i < n_; i++) buffer_[i] = buffer[i]; }
+    void WriteField (FILE * output_file);
 
 protected:
     int nx_;
@@ -49,6 +52,10 @@ public:
     void SolverMatrixDecompose ();
     void RhsInput (Field3D const & field);
     void LUSolve (Field3D & res_container);
+    MatD const & Pmat() const { return *pPmat_; }
+    MatD const & Lmat() const { return *pLmat_; }
+    MatD const & Umat() const { return *pUmat_; }
+    MatD const & bvec() const { return *pfield_; }
 
 protected:
     MatD *pfield_;
@@ -62,6 +69,8 @@ protected:
 
 void ApplDirichletCond (Field3D & field);
 
-void DebyeJacobiSolve (Field3D const & rhs, Field3D & potential, double debye_length, double err_threshold=1E-10);
+int DebyeJacobiSolve (Field3D const & rhs, Field3D & potential, double * iter_err_array, double debye_length, double err_threshold=1E-10);
+
+void WriteArray (FILE * output_file, double * array, int length);
 
 #endif /* _DEBYE_H_ */
