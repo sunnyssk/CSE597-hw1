@@ -1,0 +1,212 @@
+\documentclass{article}
+% Change "article" to "report" to get rid of page number on title page
+\usepackage{amsmath,amsfonts,amsthm,amssymb}
+\usepackage{setspace}
+\usepackage{Tabbing}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{extramarks}
+\usepackage{url}
+\usepackage{chngpage}
+\usepackage{longtable}
+\usepackage{soul,color}
+\usepackage{graphicx,float,wrapfig}
+\usepackage{enumitem}
+\usepackage{morefloats}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{indentfirst}
+\usepackage{lscape}
+\usepackage{pdflscape}
+\usepackage{natbib}
+\usepackage[toc,page]{appendix}
+\providecommand{\e}[1]{\ensuremath{\times 10^{#1} \times}}
+
+% In case you need to adjust margins:
+\topmargin=-0.45in      % used for overleaf
+%\topmargin=0.25in      % used for mac
+\evensidemargin=0in     %
+\oddsidemargin=0in      %
+\textwidth=6.5in        %
+%\textheight=9.75in       % used for mac
+\textheight=9.25in       % used for overleaf
+\headsep=0.25in         %
+
+% Homework Specific Information
+\newcommand{\hmwkTitle}{Progress Report 1}
+\newcommand{\hmwkDueDate}{Monday,\ September\  24,\ 2018}
+\newcommand{\hmwkClass}{Final Project}
+\newcommand{\hmwkClassTime}{CSE 597}
+\newcommand{\hmwkAuthorName}{Yueze Tan}
+\newcommand{\hmwkNames}{yut75}
+
+% Setup the header and footer
+\pagestyle{fancy}
+\lhead{\hmwkNames}
+\rhead{\hmwkClassTime: \hmwkTitle} 
+\cfoot{Page\ \thepage\ of\ \pageref{LastPage}}
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Make title
+
+\title{\vspace{2in}\textmd{\textbf{\hmwkClass:\ \hmwkTitle}} \\
+\vspace{0.1in}\large{ \hmwkClassTime}\vspace{3in}}
+
+\author{\textbf{\hmwkAuthorName} \\ \vspace{0.1in}
+\hmwkDueDate }
+\date{} % to take away today's date
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\begin{spacing}{1.1}
+\maketitle
+
+\newpage
+\section*{Abstract}
+
+1 paragraph overview of problem, solvers and comparison.
+
+Discussed in this report is the numerical approaches to solving of electrostatic Poisson equation with shielding effect that has a characteristic shielding length (known as Debye length). We first introduce the equation $(\nabla^2 - \lambda_D^-2)\Phi =\frac{\rho}{\varepsilon}$ and its physical meanings, then describe the discretization method. Direct solver (partial-pivoting LU decomposition) and iterative solver () are both introduced and compared.
+
+\section{Problem of Interest}
+
+\begin{itemize}
+    \item What the problem is
+    \item General overview
+    \item Scientific merit (Why is this worth doing?)
+    \item Fields where relevant
+    \item What other methods are used to solve this type of problem; use citations (tex ex. \cite{anderson1995computational} and \cite{wilcox1998turbulence})
+    \item Discussion of known solution (analytic/published)
+\end{itemize}
+
+\subsection{Problem Statement}
+
+The problem is related with solving the electrostatic equation in a system with free charges and shielding effects, typical cases would be plasma or electrolyte.
+
+\subsection{Analytical Solution}
+
+This problem has an analytical solution, which is based on its Green function:
+
+\[ \Phi(\mathbf{r}) = \int _V \frac{\rho(\mathbf{r'}) (\mathbf{r} - \mathbf{r'}) \exp(|\mathbf{r} - \mathbf{r'} / \lambda_D|)}{|\mathbf{r} - \mathbf{r'}|^3} \mathrm{d}^3 \mathbf{r'}\]
+
+Basically, this solution is a modified version of the regular electrostatic solution for Poisson equation, but equipped with an exponentially decaying factor so the electric potential drops much faster, which is what we can expect from a shielding effect.
+
+However, carrying out such a numerical integration is practically unfavourable for most cases, as the time consumption is not satisfying ($ O(n^2) $ for each single solution), and precision of numerical solution is also unsatisfying since the expression to be integrated is divergent at $\mathbf{r} = \mathbf{r'}$.
+
+\subsection{Numerical Set-up}
+
+\begin{itemize}
+    \item How the A-matrix and b-vector are formed
+    \item Problem sizes for problems of interest, test problems
+    \item Boundary conditions (if applicable)
+    \item Discretization method (if applicable) 
+\end{itemize}
+
+\section{Solvers}
+
+\subsection{Direct Solver}
+
+\begin{itemize}
+    \item Direct solver being used     
+    \item Justification for direct solver being used
+    \item List of and justification for optimization flags 
+    \item Timing for test problem 
+    \begin{itemize}
+        \item If you use a back-fill type method, provide timing for finding x using the back-fill and $A^{-1}$ method
+    \end{itemize}
+    \item Projection of time for production problem
+    \item Memory being allocated for test problem
+    \item Comparison with memory being used by task
+    \item Projection of memory required for production problem
+\end{itemize}
+
+\subsubsection{Direct Solver Used}
+
+In solving this problem, partial-pivoting LU decomposition solver is used. This solver decomposes the target matrix $A$ so that
+
+\[\mathbf{PA = LU}\]
+
+in order to avoid 0 (or very close to zero) diagonal elements in the process of LU decomposition.
+
+\subsubsection{Why LU Decomposition}
+
+In real application scenes, solving of electric field is very likely to be carried out for hundreds/thousands of times during the process of solving an entire problem. That makes matrix decomposition an appealing method compared to Gauss elimination method.
+
+\subsection{Iterative Solver}
+
+\begin{itemize}
+    \item Iterative solver being used 
+    \item Justification for iterative solver being used
+    \item Justification for convergence criteria, and residual/norm being used
+    \item List of and justification for optimization flags 
+    \item Timing for test problem for 3 different initialization methods (random, good guess, all zeros or ones)
+    \item Plot showing convergence, comparison of convergence rate with expected rate
+    \item Projection of time required for production problem
+    \item Memory being allocated for test problem
+    \item Comparison with memory being used by task
+    \item Projection of memory required for production problem
+\end{itemize}
+
+\section{Solver Comparison}
+
+\begin{itemize}
+    \item Which solver does better? (compute time, memory)
+    \item Which solver will do better for a production scale problem?
+    \item Discuss how the production problem projections will be constrained and what will need to be taken into account for parallelization
+    \begin{itemize}
+        \item Examples: Are you going to use too much RAM for a single node? Is the compute time going to be unreasonable?
+    \end{itemize}
+\end{itemize}
+
+\section{Discussion and Conclusions}
+
+\begin{enumerate}
+    \item Basic overview of what you have done
+    \item Justification for solver choices 
+    \item Discussion of constraints of production problem with requirements for parallelization
+\end{enumerate}
+
+
+
+
+
+
+\newpage
+\begin{appendices}
+
+\section{Acknowledgements}
+
+Any acknowledgements you would like to make - other students in the class, lab-mates, professors in the field, etc.
+
+\section{Code}
+
+\begin{itemize}
+    \item Where can you find the code
+    \item File names and descriptions
+    \item Instructions for compiling and reproducing your results
+    \item Listing of which nodes types you ran on 
+\end{itemize}
+
+\section{Licensing and Publishing}
+
+\begin{itemize}
+    \item Discussion of license choice
+    \item Discussion of location of publication
+\end{itemize}
+\end{appendices}
+
+
+
+
+
+\bibliographystyle{acm}
+\bibliography{progressReport}
+
+\end{spacing}
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%}}

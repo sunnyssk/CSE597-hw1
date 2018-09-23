@@ -10,12 +10,20 @@
 
 int main (int argc, char** argv) {
     srand(time(NULL));
-    int size = 7;
-    int nx = 30, ny = 20, nz = 10;
+    if(argc != 2){
+        std::cout << "Usage: main [PATH-OF-INPUT]\n"
+                  << "The input file should contain one line with three numbers, (nx, ny, nz) of the system.\n"
+                  << "Please try again with the correct grammar." << std::endl;
+        return 1;
+    }
+    int nx, ny, nz;
+    FILE *fin = fopen(argv[1], "r");
+    fscanf(fin, "%d %d %d", &nx, &ny, &nz);
+    fclose(fin);
     double debye_length = 1E-7;
     Field3D rhs(nx, ny, nz, 1E-9), potential1(nx, ny, nz, 1E-9), potential2(nx, ny, nz, 1E-9);
     double ee = 1.60217662E-19, e0 = 8.854187817E-12;
-    for (int i = 0; i < 30; i++) rhs(rand() % nx, rand() % ny, rand() % nz) = -1 * ee / e0 * 1E27;       // -rho / epsilon_0
+    for (int i = 0; i < 30; i++) rhs(rand() % (nx - 2) + 1, rand() % (ny - 2) + 1, rand() % (nz - 2) + 1) = -1 * ee / e0 * 1E27;       // -rho / epsilon_0
 
     // Direct Solver
     std::cout << "==============="
