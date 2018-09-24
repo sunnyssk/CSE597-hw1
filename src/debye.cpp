@@ -55,6 +55,9 @@ int DebyeJacobiSolve (Field3D const & rhs, Field3D & potential, double * iter_er
         std::cout << "Iteration round #" << iter_cnt << ", maximum error: " << errmax << "\n";
         iter_err_array[iter_cnt - 1] = errmax;
     } while (errmax >= err_threshold || &potential != next);                    // only exits iteration when the original field is updated
+    char *buffer = new char[256];
+    MemSizeOutput(buffer);
+    delete[] buffer;
     return iter_cnt;
 }
 

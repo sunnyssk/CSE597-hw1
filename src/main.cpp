@@ -72,7 +72,6 @@ int main (int argc, char** argv) {
     start_time = std::clock();
     iter_cycles = DebyeJacobiSolve(rhs, potential2, error_array, debye_length, 1E-10);
     std::cout << "Iteration done. Time: " << double(std::clock() - start_time) / (CLOCKS_PER_SEC / 1000) << " ms." << std::endl;
-    MemSizeOutput(info_buffer);
     fout = fopen("output/potential-iterative-zero.txt", "w");
     potential2.WriteField(fout);
     fclose(fout);
@@ -88,7 +87,6 @@ int main (int argc, char** argv) {
     start_time = std::clock();
     iter_cycles = DebyeJacobiSolve(rhs, potential3, error_array, debye_length, 1E-10);
     std::cout << "Iteration done. Time: " << double(std::clock() - start_time) / (CLOCKS_PER_SEC / 1000) << " ms." << std::endl;
-    MemSizeOutput(info_buffer);
     fout = fopen("output/potential-iterative-random.txt", "w");
     potential3.WriteField(fout);
     fclose(fout);
@@ -105,7 +103,6 @@ int main (int argc, char** argv) {
     start_time = std::clock();
     iter_cycles = DebyeJacobiSolve(rhs, potential4, error_array, debye_length, 1E-10);
     std::cout << "Iteration done. Time: " << double(std::clock() - start_time) / (CLOCKS_PER_SEC / 1000) << " ms." << std::endl;
-    MemSizeOutput(info_buffer);
     fout = fopen("output/potential-iterative-better.txt", "w");
     potential4.WriteField(fout);
     fclose(fout);
