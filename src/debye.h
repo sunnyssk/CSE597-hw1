@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include "matrix.h"
+#include "meminfo.h"
 
 class Field3D {
 public:
