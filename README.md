@@ -6,7 +6,7 @@ Author     : Yueze Tan
 
 Email      : yut75@psu.edu
 
-Last update: 2018/09/06
+Last update: 2018/09/23
 
 License    : GNU (See `license.txt` for details. A copy of GPL is provided as in `gpl.txt`.)
 
@@ -25,10 +25,13 @@ You should see "Make completed." if everything goes on well.
 
 ## Write-up Compilation
 
-To compile write-ups, switch to folder `writeup`, and type the command
+The write-up is generated with [overleaf](https://v2.overleaf.com). A copy is already included in the folder `writeup`.
 
-    cd writeup
-    ./pdfmake.sh
+To generate a new copy, please upload the .tex and .bib file to the website, along with the three figures in the `output` folder.
+
+Create an `output` and a `writeup` folder under one project, place all the figures under `output`, and place the other files under `writeup`.
+
+Set main file of project as `writeup/main.tex`, then click the compile button to get the output.
 
 ## Acknowledgements
 
