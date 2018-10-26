@@ -36,7 +36,7 @@ int main (int argc, char** argv) {
     std::cout << "===============\n"
               << " Direct Solver \n"
               << "===============\n" << std::endl;
-    DebyeLUSolver dsolve;
+    DebyeSolver dsolve;
     start_time = std::clock();
     dsolve.GenerateSolverMatrix(rhs, debye_length);
     std::cout << "System matrix generated. Time: " << double(std::clock() - start_time) / (CLOCKS_PER_SEC / 1000) << " ms." << std::endl;
@@ -70,7 +70,7 @@ int main (int argc, char** argv) {
               << " Iterative Solver: Zero guess \n"
               << "==============================\n" << std::endl;
     start_time = std::clock();
-    iter_cycles = DebyeJacobiSolve(rhs, potential2, error_array, debye_length, 1E-10);
+    iter_cycles = dsolve.JacobiIterativeSolve(1E-10, potential2, error_array);
     std::cout << "Iteration done. Time: " << double(std::clock() - start_time) / (CLOCKS_PER_SEC / 1000) << " ms." << std::endl;
     fout = fopen("output/potential-iterative-zero.txt", "w");
     potential2.WriteField(fout);
@@ -84,8 +84,9 @@ int main (int argc, char** argv) {
               << " Iterative Solver: Random guess \n"
               << "================================\n" << std::endl;
     for (int i = 0; i < n; i++) potential3(i) = double(rand()) / RAND_MAX - 0.5;
+    potential3.ApplDirichletCond();
     start_time = std::clock();
-    iter_cycles = DebyeJacobiSolve(rhs, potential3, error_array, debye_length, 1E-10);
+    iter_cycles = dsolve.JacobiIterativeSolve(1E-10, potential3, error_array);
     std::cout << "Iteration done. Time: " << double(std::clock() - start_time) / (CLOCKS_PER_SEC / 1000) << " ms." << std::endl;
     fout = fopen("output/potential-iterative-random.txt", "w");
     potential3.WriteField(fout);
@@ -100,8 +101,9 @@ int main (int argc, char** argv) {
               << "================================\n" << std::endl;
     Field3D potential4(rhs);
     for (int i = 0; i < n; i++) potential4(i) = -rhs(i) / (ee / e0 * 1E27);
+    potential4.ApplDirichletCond();
     start_time = std::clock();
-    iter_cycles = DebyeJacobiSolve(rhs, potential4, error_array, debye_length, 1E-10);
+    iter_cycles = dsolve.JacobiIterativeSolve(1E-10, potential4, error_array);
     std::cout << "Iteration done. Time: " << double(std::clock() - start_time) / (CLOCKS_PER_SEC / 1000) << " ms." << std::endl;
     fout = fopen("output/potential-iterative-better.txt", "w");
     potential4.WriteField(fout);
