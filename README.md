@@ -31,6 +31,8 @@ Then you can run the program by specifying the input file:
 
 The input file should contain only three integers (Nx, Ny, Nz), specifying the number of grids on each dimension.
 
+The code is available for running directly on ACI logon nodes.
+
 ## Expected Output
 
 The program will show basic time & spatial consumptions on screen when running, along with the specific steps taken in solving the problems. The errors in iterative solver steps will be saved in `output/error-XXX.txt`, and results are given in `potential-XXX.txt` files. These output files could be processed and visualized with the iPython-Notebook files in the homework root folder.

@@ -51,8 +51,11 @@ int main (int argc, char** argv) {
     std::cout << "Direct solver completed. Time: " << double(std::clock() - start_time) / (CLOCKS_PER_SEC / 1000) << " ms." << std::endl;
     MemSizeOutput(info_buffer);
     FILE *fout = fopen("output/potential-direct.txt", "w");
-    potential1.WriteField(fout);
-    fclose(fout);
+    if (fout == nullptr) printf("**CRITICAL** Folder \"output\" under current path cannot be reached. All numerical results will get lost!\n");
+    else {
+        potential1.WriteField(fout);
+        fclose(fout);
+    }
     MatD invL(n, n), invU(n, n);
     start_time = std::clock();
     dsolve.Lmat().LInverse(invL);
@@ -73,11 +76,15 @@ int main (int argc, char** argv) {
     iter_cycles = dsolve.JacobiIterativeSolve(1E-10, potential2, error_array);
     std::cout << "Iteration done. Time: " << double(std::clock() - start_time) / (CLOCKS_PER_SEC / 1000) << " ms." << std::endl;
     fout = fopen("output/potential-iterative-zero.txt", "w");
-    potential2.WriteField(fout);
-    fclose(fout);
+    if (fout != nullptr) {
+        potential2.WriteField(fout);
+        fclose(fout);
+    }
     fout = fopen("output/error-zero.txt", "w");
-    WriteArray(fout, error_array, iter_cycles);
-    fclose(fout);
+    if (fout != nullptr) {
+        WriteArray(fout, error_array, iter_cycles);
+        fclose(fout);
+    }
 
     // Iterative Solver: Random Guess
     std::cout << "================================\n"
@@ -89,11 +96,15 @@ int main (int argc, char** argv) {
     iter_cycles = dsolve.JacobiIterativeSolve(1E-10, potential3, error_array);
     std::cout << "Iteration done. Time: " << double(std::clock() - start_time) / (CLOCKS_PER_SEC / 1000) << " ms." << std::endl;
     fout = fopen("output/potential-iterative-random.txt", "w");
-    potential3.WriteField(fout);
-    fclose(fout);
+    if (fout != nullptr) {
+        potential3.WriteField(fout);
+        fclose(fout);
+    }
     fout = fopen("output/error-random.txt", "w");
-    WriteArray(fout, error_array, iter_cycles);
-    fclose(fout);
+    if (fout != nullptr) {
+        WriteArray(fout, error_array, iter_cycles);
+        fclose(fout);
+    }
 
     // Iterative Solver: Better Guess
     std::cout << "================================\n"
@@ -106,11 +117,15 @@ int main (int argc, char** argv) {
     iter_cycles = dsolve.JacobiIterativeSolve(1E-10, potential4, error_array);
     std::cout << "Iteration done. Time: " << double(std::clock() - start_time) / (CLOCKS_PER_SEC / 1000) << " ms." << std::endl;
     fout = fopen("output/potential-iterative-better.txt", "w");
-    potential4.WriteField(fout);
-    fclose(fout);
+    if (fout != nullptr) {
+        potential4.WriteField(fout);
+        fclose(fout);
+    }
     fout = fopen("output/error-better.txt", "w");
-    WriteArray(fout, error_array, iter_cycles);
-    fclose(fout);
+    if (fout != nullptr) {
+        WriteArray(fout, error_array, iter_cycles);
+        fclose(fout);
+    }
 
     delete[] error_array;
     return 0;

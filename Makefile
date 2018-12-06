@@ -7,7 +7,7 @@
 NAME = LUDecomposition
 
 CC = g++
-CFLAGS = -O2 -mfma -mavx -std=c++11 -Wno-unused-result
+CFLAGS = -O3 -mfma -mavx -std=c++11 -Wno-unused-result
 LFLAGS = -lm
 
 SRCPATH = ./src
